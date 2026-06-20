@@ -1,5 +1,6 @@
 package com.sd.laborator.presentation.controllers
 
+import com.sd.laborator.business.interfaces.ICacheClient
 import com.sd.laborator.business.interfaces.ILibraryDAOService
 import com.sd.laborator.business.interfaces.ILibraryPrinterService
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,6 +17,9 @@ class LibraryPrinterController {
 
     @Autowired
     private lateinit var _libraryPrinterService: ILibraryPrinterService
+
+    @Autowired
+    private lateinit var _cacheClient: ICacheClient
 
 
     @RequestMapping("/print", method = [RequestMethod.GET])
@@ -36,13 +40,18 @@ class LibraryPrinterController {
         @RequestParam(required = false, name = "title", defaultValue = "") title: String,
         @RequestParam(required = false, name = "publisher", defaultValue = "") publisher: String
     ): String {
-        if (author != "")
-            return this._libraryPrinterService.printJSON(this._libraryDAOService.findAllByAuthor(author))
-        if (title != "")
-            return this._libraryPrinterService.printJSON(this._libraryDAOService.findAllByTitle(title))
-        if (publisher != "")
-            return this._libraryPrinterService.printJSON(this._libraryDAOService.findAllByPublisher(publisher))
-        return "Not a valid field"
+        val cacheKey = "find?author=$author&title=$title&publisher=$publisher"
+        _cacheClient.lookup(cacheKey)?.let { return it }
+
+        val result = when {
+            author != "" -> this._libraryPrinterService.printJSON(this._libraryDAOService.findAllByAuthor(author))
+            title != "" -> this._libraryPrinterService.printJSON(this._libraryDAOService.findAllByTitle(title))
+            publisher != "" -> this._libraryPrinterService.printJSON(this._libraryDAOService.findAllByPublisher(publisher))
+            else -> "Not a valid field"
+        }
+
+        _cacheClient.store(cacheKey, result)
+        return result
     }
 
 }
