@@ -1,0 +1,124 @@
+<svg viewBox="0 0 1100 760" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif" font-size="12">
+  <rect width="1100" height="760" fill="#ffffff"/>
+  <text x="550" y="30" text-anchor="middle" font-size="18" font-weight="bold">Diagrama de clase - MerkleMicroservice</text>
+
+  <!-- MerkleController -->
+  <g>
+    <rect x="400" y="60" width="300" height="110" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5"/>
+    <text x="550" y="78" text-anchor="middle" font-weight="bold">MerkleController</text>
+    <line x1="400" y1="86" x2="700" y2="86" stroke="#1a73e8"/>
+    <text x="410" y="104">+ build(keys: List&lt;String&gt;)</text>
+    <text x="410" y="120">+ addLeaf(key): void</text>
+    <text x="410" y="136">+ removeLeaf(key): void</text>
+    <text x="410" y="152">+ search(key): Boolean</text>
+    <text x="410" y="168" font-size="11">+ root(): String?</text>
+  </g>
+
+  <!-- IMerkleService -->
+  <g>
+    <rect x="400" y="210" width="300" height="110" fill="#fff" stroke="#666" stroke-width="1.2"/>
+    <text x="550" y="228" text-anchor="middle" font-style="italic" font-weight="bold">&lt;&lt;interface&gt;&gt; IMerkleService</text>
+    <line x1="400" y1="236" x2="700" y2="236" stroke="#666"/>
+    <text x="410" y="252">+ buildFromZone(keys)</text>
+    <text x="410" y="268">+ addLeaf(key)</text>
+    <text x="410" y="284">+ removeLeaf(key)</text>
+    <text x="410" y="300">+ contains(key): Boolean</text>
+    <text x="410" y="316" font-size="11">+ getRootHash(): String?</text>
+  </g>
+
+  <!-- MerkleService -->
+  <g>
+    <rect x="400" y="360" width="300" height="100" fill="#e6f4ea" stroke="#188038" stroke-width="1.5"/>
+    <text x="550" y="378" text-anchor="middle" font-weight="bold">MerkleService</text>
+    <line x1="400" y1="386" x2="700" y2="386" stroke="#188038"/>
+    <text x="410" y="402">- root: MerkleNode?</text>
+    <line x1="400" y1="410" x2="700" y2="410" stroke="#188038"/>
+    <text x="410" y="426">(orchestreaza ILeafRepository</text>
+    <text x="410" y="442">+ IMerkleTreeBuilder, rebuild la fiecare mutatie)</text>
+  </g>
+
+  <!-- ILeafRepository -->
+  <g>
+    <rect x="40" y="360" width="280" height="120" fill="#fff" stroke="#666" stroke-width="1.2"/>
+    <text x="180" y="378" text-anchor="middle" font-style="italic" font-weight="bold">&lt;&lt;interface&gt;&gt; ILeafRepository</text>
+    <line x1="40" y1="386" x2="320" y2="386" stroke="#666"/>
+    <text x="50" y="402">+ add(key)</text>
+    <text x="50" y="418">+ addAll(keys)</text>
+    <text x="50" y="434">+ remove(key)</text>
+    <text x="50" y="450">+ contains(key): Boolean</text>
+    <text x="50" y="466">+ getAll(): List&lt;String&gt; / clear()</text>
+  </g>
+
+  <!-- InMemoryLeafRepository -->
+  <g>
+    <rect x="40" y="520" width="280" height="80" fill="#d8f0e0" stroke="#188038" stroke-width="1.5"/>
+    <text x="180" y="538" text-anchor="middle" font-weight="bold">InMemoryLeafRepository</text>
+    <line x1="40" y1="546" x2="320" y2="546" stroke="#188038"/>
+    <text x="50" y="562">- keys: ConcurrentSkipListSet&lt;String&gt;</text>
+    <text x="50" y="578">(zona de date primita ca obiect)</text>
+  </g>
+
+  <!-- IMerkleTreeBuilder -->
+  <g>
+    <rect x="780" y="360" width="280" height="80" fill="#fff" stroke="#666" stroke-width="1.2"/>
+    <text x="920" y="378" text-anchor="middle" font-style="italic" font-weight="bold">&lt;&lt;interface&gt;&gt; IMerkleTreeBuilder</text>
+    <line x1="780" y1="386" x2="1060" y2="386" stroke="#666"/>
+    <text x="790" y="402">+ build(leafKeys: List&lt;String&gt;): MerkleNode?</text>
+  </g>
+
+  <!-- MerkleTreeBuilder -->
+  <g>
+    <rect x="780" y="480" width="280" height="80" fill="#d8f0e0" stroke="#188038" stroke-width="1.5"/>
+    <text x="920" y="498" text-anchor="middle" font-weight="bold">MerkleTreeBuilder</text>
+    <line x1="780" y1="506" x2="1060" y2="506" stroke="#188038"/>
+    <text x="790" y="522">(sorteaza, hash leaf-uri, combina</text>
+    <text x="790" y="538">bottom-up pana la root, foloseste IHasher)</text>
+  </g>
+
+  <!-- IHasher / Sha256Hasher -->
+  <g>
+    <rect x="780" y="600" width="280" height="60" fill="#fff" stroke="#666" stroke-width="1.2"/>
+    <text x="920" y="618" text-anchor="middle" font-style="italic" font-weight="bold">&lt;&lt;interface&gt;&gt; IHasher</text>
+    <line x1="780" y1="626" x2="1060" y2="626" stroke="#666"/>
+    <text x="790" y="642">+ hash(input: String): String</text>
+  </g>
+  <g>
+    <rect x="780" y="680" width="280" height="60" fill="#d8f0e0" stroke="#188038" stroke-width="1.5"/>
+    <text x="920" y="698" text-anchor="middle" font-weight="bold">Sha256Hasher</text>
+    <line x1="780" y1="706" x2="1060" y2="706" stroke="#188038"/>
+    <text x="790" y="722">(SHA-256, MessageDigest)</text>
+  </g>
+
+  <!-- MerkleNode -->
+  <g>
+    <rect x="380" y="600" width="280" height="120" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.2"/>
+    <text x="520" y="618" text-anchor="middle" font-weight="bold">MerkleNode</text>
+    <line x1="380" y1="626" x2="660" y2="626" stroke="#5f6368"/>
+    <text x="390" y="642">- hash: String</text>
+    <text x="390" y="658">- left: MerkleNode?</text>
+    <text x="390" y="674">- right: MerkleNode?</text>
+    <text x="390" y="690">- leafKey: String?</text>
+    <line x1="380" y1="696" x2="660" y2="696" stroke="#5f6368"/>
+    <text x="390" y="712">+ isLeaf(): Boolean</text>
+  </g>
+
+  <!-- relationships -->
+  <line x1="550" y1="170" x2="550" y2="210" stroke="#333" stroke-width="1.5" marker-end="url(#a2)"/>
+  <line x1="550" y1="320" x2="550" y2="360" stroke="#333" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="400" y1="410" x2="320" y2="400" stroke="#333" stroke-width="1.5"/>
+  <line x1="180" y1="480" x2="180" y2="520" stroke="#333" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="700" y1="410" x2="780" y2="400" stroke="#333" stroke-width="1.5"/>
+  <line x1="920" y1="440" x2="920" y2="480" stroke="#333" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="920" y1="560" x2="920" y2="600" stroke="#333" stroke-width="1.5"/>
+  <line x1="920" y1="660" x2="920" y2="680" stroke="#333" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="780" y1="500" x2="660" y2="640" stroke="#333" stroke-width="1.5"/>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <text x="40" y="650" font-size="11" fill="#555">linie continua = compunere/folosire directa</text>
+  <text x="40" y="666" font-size="11" fill="#555">linie punctata = implementeaza interfata</text>
+</svg>
