@@ -20,10 +20,12 @@ class CacheClient : ICacheClient {
 
     override fun lookup(query: String): String? {
         return try {
-            val url = UriComponentsBuilder.fromHttpUrl("$_baseUrl/cache")
-                .queryParam("query", query)
-                .toUriString()
-            _restTemplate.getForObject(url, String::class.java)
+            val uri = UriComponentsBuilder.fromHttpUrl("$_baseUrl/cache")
+                .queryParam("query", "{query}")
+                .buildAndExpand(query)
+                .encode()
+                .toUri()
+            _restTemplate.getForObject(uri, String::class.java)
         } catch (e: HttpClientErrorException.NotFound) {
             null
         } catch (e: Exception) {
@@ -34,12 +36,14 @@ class CacheClient : ICacheClient {
 
     override fun store(query: String, result: String) {
         try {
-            val url = UriComponentsBuilder.fromHttpUrl("$_baseUrl/cache")
-                .queryParam("query", query)
-                .toUriString()
+            val uri = UriComponentsBuilder.fromHttpUrl("$_baseUrl/cache")
+                .queryParam("query", "{query}")
+                .buildAndExpand(query)
+                .encode()
+                .toUri()
             val headers = HttpHeaders()
             headers.contentType = MediaType.TEXT_PLAIN
-            _restTemplate.postForEntity(url, HttpEntity(result, headers), Void::class.java)
+            _restTemplate.postForEntity(uri, HttpEntity(result, headers), Void::class.java)
         } catch (e: Exception) {
             println("CacheClient.store failed: ${e.message}")
         }
