@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class MerkleTreeBuilder : IMerkleTreeBuilder {
+open class MerkleTreeBuilder : IMerkleTreeBuilder {
 
     @Autowired
     private lateinit var _hasher: IHasher

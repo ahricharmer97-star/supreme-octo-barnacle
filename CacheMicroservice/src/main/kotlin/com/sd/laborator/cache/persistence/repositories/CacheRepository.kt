@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
 
 @Repository
-class CacheRepository : ICacheRepository {
+open class CacheRepository : ICacheRepository {
 
     @Autowired
     private lateinit var _jdbcTemplate: JdbcTemplate

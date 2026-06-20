@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
-class CacheService : ICacheService {
+open class CacheService : ICacheService {
 
     @Autowired
     private lateinit var _cacheRepository: ICacheRepository

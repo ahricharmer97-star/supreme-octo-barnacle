@@ -1,0 +1,4 @@
+CacheMicroservice/target/
+MerkleMicroservice/target/
+CacheMicroservice/cache.db
+.idea/runConfigurations/

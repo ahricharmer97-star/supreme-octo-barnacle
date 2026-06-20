@@ -9,7 +9,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpEntity
 
 @Component
-class MerkleClient : IMerkleClient {
+open class MerkleClient : IMerkleClient {
 
     @Value("\${merkle.service.baseUrl}")
     private lateinit var _baseUrl: String

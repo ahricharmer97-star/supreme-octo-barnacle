@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 import java.security.MessageDigest
 
 @Component
-class Sha256Hasher : IHasher {
+open class Sha256Hasher : IHasher {
     override fun hash(input: String): String {
         val digest = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
         return digest.joinToString("") { "%02x".format(it) }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class MerkleService : IMerkleService {
+open class MerkleService : IMerkleService {
 
     @Autowired
     private lateinit var _leafRepository: ILeafRepository

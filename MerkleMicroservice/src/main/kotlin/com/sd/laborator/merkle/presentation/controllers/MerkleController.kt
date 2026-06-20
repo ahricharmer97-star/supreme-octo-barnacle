@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/tree")
-class MerkleController {
+open class MerkleController {
 
     @Autowired
     private lateinit var _merkleService: IMerkleService

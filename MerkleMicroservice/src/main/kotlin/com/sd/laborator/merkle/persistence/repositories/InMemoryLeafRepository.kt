@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository
 import java.util.concurrent.ConcurrentSkipListSet
 
 @Repository
-class InMemoryLeafRepository : ILeafRepository {
+open class InMemoryLeafRepository : ILeafRepository {
 
     private val _keys = ConcurrentSkipListSet<String>()
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 import javax.annotation.PostConstruct
 
 @RestController
-class CacheController {
+open class CacheController {
 
     @Autowired
     private lateinit var _cacheService: ICacheService
