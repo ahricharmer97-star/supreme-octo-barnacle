@@ -3,6 +3,7 @@ package com.sd.laborator.presentation.controllers
 import com.sd.laborator.business.interfaces.ICacheClient
 import com.sd.laborator.business.interfaces.ILibraryDAOService
 import com.sd.laborator.business.interfaces.ILibraryPrinterService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 class LibraryPrinterController {
+    private val _log = LoggerFactory.getLogger(LibraryPrinterController::class.java)
+
     @Autowired
     private lateinit var _libraryDAOService: ILibraryDAOService
 
@@ -40,8 +43,13 @@ class LibraryPrinterController {
         @RequestParam(required = false, name = "title", defaultValue = "") title: String,
         @RequestParam(required = false, name = "publisher", defaultValue = "") publisher: String
     ): String {
+        _log.info("GET /find author='{}' title='{}' publisher='{}'", author, title, publisher)
         val cacheKey = "find?author=$author&title=$title&publisher=$publisher"
-        _cacheClient.lookup(cacheKey)?.let { return it }
+        _cacheClient.lookup(cacheKey)?.let {
+            _log.info("Served from CacheMicroservice (HIT) for key='{}'", cacheKey)
+            return it
+        }
+        _log.info("Cache MISS for key='{}', querying LibraryDAOService", cacheKey)
 
         val result = when {
             author != "" -> this._libraryPrinterService.printJSON(this._libraryDAOService.findAllByAuthor(author))
@@ -50,6 +58,7 @@ class LibraryPrinterController {
             else -> "Not a valid field"
         }
 
+        _log.info("Storing result in CacheMicroservice for key='{}'", cacheKey)
         _cacheClient.store(cacheKey, result)
         return result
     }
